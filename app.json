@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "quiz-test",
+    "name": "testQuiz",
     "description": "A very interesting project.",
     "slug": "quiz-test",
     "privacy": "public",
@@ -21,7 +21,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.slugs99.testQuiz"
+    },
+    "android": {
+      "package": "com.slugs99.testQuiz"
     }
   }
 }
