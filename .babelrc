@@ -17,7 +17,8 @@
           "services": "./services",
           "config": "./config",
           "components": "./components",
-          "reduxFolder": "./redux"
+          "reduxFolder": "./redux",
+          "utils": "./utils"
         }
       }
     ]

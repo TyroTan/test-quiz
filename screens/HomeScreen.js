@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  // Image,
+  Image,
   Platform,
   ScrollView,
   StyleSheet,
@@ -10,9 +10,8 @@ import {
 } from "react-native";
 import { Button } from "react-native-elements";
 import { WebBrowser } from "expo";
-import autobind from 'autobind-decorator';
-
-import { MonoText } from "../components/StyledText";
+import CardTransition from "components/CardTransition";
+import autobind from "autobind-decorator";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -26,10 +25,30 @@ export default class HomeScreen extends React.Component {
     navigate("StartQuiz");
   }
 
+  render_() {
+    return <CardTransition {...this.props} >{this.renderMain()}</CardTransition>;
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Hello World</Text>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <View style={styles.bgImage}>
+            <Image source={require('../assets/images/color_bg2.jpg')} />
+            <Text style={styles.welcomeImage}>QUIZ</Text>
+          </View>
+
+          <View style={styles.newQuizContainer}>
+            <Button
+              buttonStyle={styles.newQuizButton}
+              title="Start Quiz"
+              onPress={this.onClickNewQuiz}
+            />
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -73,7 +92,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#7ec0ee"
+    backgroundColor: "#FFF"
   },
   welcomeImage: {
     color: "#FFF",
@@ -81,12 +100,20 @@ const styles = StyleSheet.create({
     letterSpacing: 3
   },
   newQuizButton: {
-    color: "blue"
+    backgroundColor: "blue"
   },
   newQuizContainer: {
     alignItems: "center",
     marginHorizontal: 25
   },
+  bgImage: {
+    width: 100,
+    height: 80,
+    resizeMode: 'contain',
+    marginTop: 3,
+    marginLeft: -10,
+  },
+
 
   developmentModeText: {
     marginBottom: 20,

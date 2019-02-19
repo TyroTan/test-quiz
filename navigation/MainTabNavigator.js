@@ -5,10 +5,11 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import StartQuizScreen from '../screens/StartQuizScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ResultsScreen from '../screens/ResultsScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  StartQuiz: StartQuizScreen,
 });
 
 HomeStack.navigationOptions = {
@@ -25,26 +26,12 @@ HomeStack.navigationOptions = {
   ),
 };
 
-const StartQuizStack = createStackNavigator({
-  StartQuiz: StartQuizScreen,
+const ResultsStack = createStackNavigator({
+  Results: ResultsScreen,
 });
 
-StartQuizStack.navigationOptions = {
-  tabBarLabel: 'StartQuiz',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
-};
-
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+ResultsStack.navigationOptions = {
+  tabBarLabel: 'Results',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -54,5 +41,6 @@ SettingsStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator({
-  HomeStack
+  HomeStack,
+  ResultsStack,
 });

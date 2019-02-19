@@ -1,34 +1,94 @@
-import React, { PureComponent } from 'react';
-import { View, Text } from 'react-native'
-import { Button } from 'react-native-elements';
+import React, { Component } from "react";
+import { Animated, ScrollView, StyleSheet, Text } from "react-native";
+import { Button as ButtonEl } from "react-native-elements";
+import { getShuffle1_4 } from "utils/js-util";
+import autobind from "autobind-decorator";
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
 
-// {
-// [23:53:01]   "category": "Sports",
-// [23:53:01]   "correct_answer": "Puma",
-// [23:53:01]   "difficulty": "medium",
-// [23:53:01]   "incorrect_answers": Array [
-// [23:53:01]     "Nike",
-// [23:53:01]     "Adidas",
-// [23:53:01]     "Reebok",
-// [23:53:01]   ],
-// [23:53:01]   "question": "Which German sportswear company&#039;s logo is the &#039;Formstripe&#039;?",
-// [23:53:01]   "type": "multiple",
-// [23:53:01] }
+const { View } = Animated;
 
-export default class Question extends PureComponent {
+export default class Question extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fadeAnim: new Animated.Value(1)
+    };
+  }
+
+  componentDidUpdate(newProps) {
+    const isLoading = newProps?.item?.incorrect_answers ? false : true;
+  }
+
+
+  componentDidMount() {
+  }
+
+  startAnimate() {
+    Animated.timing(
+      this.state.fadeAnim, // The value to drive
+      { duration: 1000, toValue: 1 } // Configuration
+    ).start();
+  }
+
+  @autobind
+  onButtonPress(c) {
+    const { onAnswer } = this.props;
+    this.setState(
+      {
+        fadeAnim: new Animated.Value(0)
+      },
+      () => {
+        onAnswer(c);
+        this.startAnimate();
+      }
+    );
+  }
+
+  renderChoices() {
+    const { item = {} } = this.props,
+      { correct_answer = "", incorrect_answers = [] } = item,
+      choices = getShuffle1_4([...incorrect_answers, correct_answer]);
+    const isLoading = this.props?.item?.incorrect_answers ? false : true;
+
+    return (
+      <ScrollView>
+        {choices.map((c, i) => (
+          <View
+            style={{
+              paddingVertical: 5,
+              opacity: this.state.fadeAnim.interpolate({
+                inputRange: [0, 0.3, 1],
+                outputRange: [0, 0.3 - (0.1 * i) , 1]
+              })
+            }}
+          >
+            <ButtonEl
+              key={c}
+              onPress={() => this.onButtonPress(c)}
+              loading={isLoading}
+              title={`${c}`}
+            />
+          </View>
+        ))}
+      </ScrollView>
+    );
+  }
+
   render() {
-    const { item = `` } = this.props;
+    const { item = {} } = this.props;
 
     return (
       <View>
-        <Text>
-          {item.question}
-        </Text>
-        <Button
-          title="Python"
-          raised
-        />
+        <Text>{entities.decode(item.question)}</Text>
+        {this.renderChoices()}
       </View>
-    )
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    paddingVertical: 10
+  }
+})
